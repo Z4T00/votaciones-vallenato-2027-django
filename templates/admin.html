@@ -1,0 +1,9 @@
+{% load static %}
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Administración | Festival Vallenato 2027</title><link rel="stylesheet" href="{% static 'css/styles.css' %}"></head><body>
+<header class="site-header"><div class="wrap"><a class="brand" href="index.html">Festival de la Leyenda Vallenata<small>Sistema de Votaciones 2027</small></a><nav><a href="index.html">Sitio público</a><a href="/django-admin/">Gestión</a><a href="/salir/">Cerrar sesión</a></nav></div><div class="keys"></div></header>
+<main class="wrap"><h1>Panel de administración</h1><p>Acceso restringido al personal autorizado.</p><div class="grid">
+<article class="card dest"><h3>Ediciones y categorías</h3><p>Configura las ediciones del festival y sus categorías.</p><a class="btn" href="/django-admin/votaciones/edicion/">Gestionar ediciones</a><a class="btn" href="/django-admin/votaciones/categoria/">Gestionar categorías</a></article>
+<article class="card dest"><h3>Votaciones</h3><p>Administra las votaciones y sus fechas.</p><a class="btn" href="/django-admin/votaciones/votacion/">Gestionar votaciones</a></article>
+<article class="card dest"><h3>Participantes</h3><p>Administra las opciones disponibles en cada votación.</p><a class="btn" href="/django-admin/votaciones/opcion/">Gestionar participantes</a></article>
+<article class="card dest"><h3>Resultados</h3><p>Consulta los votos registrados.</p><a class="btn" href="/admin-resultados.html">Ver resultados</a></article>
+</div></main><footer class="site-footer"><div class="wrap">Panel privado de administración.</div></footer></body></html>

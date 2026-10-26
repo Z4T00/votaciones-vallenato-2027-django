@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inicio | Votaciones Festival Vallenato 2027</title>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="index.html">Festival de la Leyenda Vallenata<small>Sistema de Votaciones 2027</small></a>
+<nav aria-label="Navegación principal"><a href="index.html" class="activo" aria-current="page">Inicio</a><a href="categorias.html">Categorías</a><a href="votaciones.html">Votaciones</a>{% if user.is_authenticated %}<a href="/salir/">Cerrar sesión</a>{% else %}<a href="login.html">Iniciar sesión</a>{% endif %}{% if user.is_authenticated and user.is_staff %}<a href="admin.html">Administración</a>{% endif %}</nav>
+</div>
+<div class="keys"></div>
+</header>
+
+<main class="wrap">
+<section class="hero">
+<p class="anio">Valledupar · 2027</p>
+<h1>Elige a los protagonistas del Festival de la Leyenda Vallenata</h1>
+<p>Regístrate, escoge una categoría y deja tu voto por el Rey Profesional, el Rey Aficionado, el Rey Juvenil o la Canción Inédita.</p>
+<div class="acciones"><a class="btn" href="registro.html">Registrarse</a><a class="btn sec" href="login.html">Iniciar sesión</a></div>
+</section>
+<h2 style="margin-top:2rem">Cómo votar</h2>
+<ol class="pasos"><li>Crea tu cuenta o inicia sesión.</li><li>Elige una categoría.</li><li>Selecciona tu opción y confirma el voto.</li></ol>
+</main>
+<footer class="site-footer"><div class="wrap">Prototipo académico, primera entrega. Solo HTML y CSS: los formularios no procesan datos.</div></footer>
+</body>
+</html>

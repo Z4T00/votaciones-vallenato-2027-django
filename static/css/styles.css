@@ -1,0 +1,68 @@
+/* Festival de la Leyenda Vallenata 2027 - Sistema de Votaciones (prototipo HTML/CSS) */
+:root{--ink:#1c2430;--red:#a82a2e;--gold:#d9a22b;--bg:#f4f5f7;--card:#fff;--line:#d9dde3;--muted:#5a6573;--radius:8px}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.55 system-ui,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;margin:0 0 .5rem}
+h1{font-size:clamp(1.8rem,5vw,2.8rem)}h2{font-size:1.5rem}h3{font-size:1.15rem}
+p{margin:0 0 1rem;max-width:65ch}a{color:var(--red)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* Encabezado: franja de teclas de acordeon */
+.site-header{background:var(--ink);color:#fff}
+.site-header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem 1.5rem;padding:.9rem 1rem}
+.brand{font:700 1.1rem Georgia,serif;color:#fff;text-decoration:none}
+.brand small{display:block;font:400 .8rem system-ui,sans-serif;color:var(--gold)}
+.site-header nav{display:flex;flex-wrap:wrap;gap:.25rem}
+.site-header nav a{color:#fff;text-decoration:none;padding:.4rem .8rem;border-radius:var(--radius)}
+.site-header nav a:hover,.site-header nav a.activo{background:var(--red)}
+.keys{height:8px;background:repeating-linear-gradient(90deg,#fff 0 16px,var(--ink) 16px 32px)}
+.admin-bar{background:var(--gold);color:var(--ink);text-align:center;font-size:.9rem;padding:.25rem}
+
+.wrap{max-width:1000px;margin:0 auto;padding:0 1rem}
+main.wrap{padding-top:2rem;padding-bottom:3rem}
+.site-footer{border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;padding:1.2rem 0;text-align:center}
+
+/* Portada */
+.hero{background:var(--ink);color:#fff;border-radius:var(--radius);padding:clamp(1.5rem,5vw,3.5rem);border-left:10px solid var(--red)}
+.hero p{color:#e6e9ee;font-size:1.1rem}
+.hero .anio{color:var(--gold);font-family:Georgia,serif;font-size:1.2rem}
+.pasos{padding-left:1.2rem}.pasos li{margin-bottom:.4rem}
+
+/* Botones */
+.btn,button{display:inline-block;font:inherit;font-weight:600;padding:.6rem 1.2rem;border:2px solid var(--red);border-radius:var(--radius);background:var(--red);color:#fff;text-decoration:none;cursor:pointer}
+.btn:hover,button:hover{background:#8a2024;border-color:#8a2024}
+.btn.sec,button.sec{background:transparent;color:var(--red)}
+.btn.sec:hover,button.sec:hover{background:var(--red);color:#fff}
+.hero .btn.sec{color:#fff;border-color:#fff}.hero .btn.sec:hover{background:#fff;color:var(--ink)}
+.btn.peq,button.peq{padding:.25rem .7rem;font-size:.9rem}
+.acciones{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:1.2rem}
+
+/* Tarjetas y rejillas */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.5rem 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem}
+.card.dest{border-top:5px solid var(--gold)}
+.card h3{color:var(--red)}
+.card.form{max-width:480px;margin:1rem auto}
+
+/* Formularios */
+label{display:block;font-weight:600;margin:.9rem 0 .25rem}
+input[type=text],input[type=email],input[type=password],input[type=date],select,textarea{width:100%;font:inherit;padding:.55rem .7rem;border:1px solid #aab2bd;border-radius:var(--radius);background:#fff}
+.opcion{display:flex;gap:.75rem;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:.9rem;margin-bottom:.6rem;font-weight:400;margin-top:0}
+.opcion input{margin-top:.35rem;accent-color:var(--red)}
+.opcion strong{display:block}
+.aviso{background:#fff7e0;border-left:5px solid var(--gold);padding:.8rem 1rem;border-radius:var(--radius);margin:1rem 0}
+.ok{text-align:center;max-width:560px;margin:1rem auto}
+.ok .sello{display:inline-grid;place-items:center;width:84px;height:84px;border-radius:50%;background:var(--red);color:#fff;font-size:2.6rem;margin-bottom:1rem}
+.ok p{margin-inline:auto}
+.estado{display:inline-block;padding:.1rem .6rem;border-radius:99px;font-size:.85rem;font-weight:600;background:#e3f1e6;color:#1d5e2d}
+.estado.cerrada{background:#eceef1;color:var(--muted)}
+
+/* Tablas */
+.tabla{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:var(--radius);margin:1rem 0}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{text-align:left;padding:.65rem .8rem;border-bottom:1px solid var(--line)}
+th{background:#eceef1;font-size:.95rem}tr:last-child td{border-bottom:0}
+td .btn,td button{margin-right:.3rem}
+progress{width:100%;height:14px;accent-color:var(--red)}
+
+@media (max-width:600px){.site-header .wrap{justify-content:center;text-align:center}.hero{border-left-width:6px}}

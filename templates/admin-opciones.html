@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gestión de opciones | Votaciones Festival Vallenato 2027</title>
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<header class="site-header">
+<div class="wrap">
+<a class="brand" href="index.html">Festival de la Leyenda Vallenata<small>Sistema de Votaciones 2027</small></a>
+<nav aria-label="Navegación principal"><a href="admin.html">Panel</a><a href="admin-categorias.html">Categorías</a><a href="admin-votaciones.html">Votaciones</a><a href="admin-opciones.html" class="activo" aria-current="page">Opciones</a><a href="admin-resultados.html">Resultados</a><a href="index.html">Salir</a></nav>
+</div>
+<div class="keys"></div>
+</header>
+<div class="admin-bar">Panel de administración (vista de ejemplo, sin autenticación real)</div>
+<main class="wrap">
+<h1>Gestión de opciones</h1>
+<div class="card"><h3>Nueva opción</h3><form><label>Votación<select><option>Final Rey Profesional</option><option>Final Rey Aficionado</option><option>Premio Canción Inédita</option></select></label><label>Nombre del participante<input type="text" placeholder=""></label><label>Procedencia<input type="text" placeholder="Ej. Valledupar"></label><div class="acciones"><button type="button">Guardar opción</button></div></form></div>
+<h2 style="margin-top:2rem">Opciones de Final Rey Profesional</h2><div class="tabla"><table><thead><tr><th>Participante</th><th>Procedencia</th><th>Acciones</th></tr></thead><tbody><tr><td>Participante A</td><td>Valledupar</td><td><button type="button" class="sec peq">Editar</button><button type="button" class="sec peq">Eliminar</button></td></tr><tr><td>Participante B</td><td>Villanueva</td><td><button type="button" class="sec peq">Editar</button><button type="button" class="sec peq">Eliminar</button></td></tr><tr><td>Participante C</td><td>Riohacha</td><td><button type="button" class="sec peq">Editar</button><button type="button" class="sec peq">Eliminar</button></td></tr></tbody></table></div>
+</main>
+<footer class="site-footer"><div class="wrap">Prototipo académico, primera entrega. Solo HTML y CSS: los formularios no procesan datos.</div></footer>
+</body>
+</html>
