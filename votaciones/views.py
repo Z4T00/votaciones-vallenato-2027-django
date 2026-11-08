@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.http import require_GET
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -32,31 +34,43 @@ def votaciones(request):
     items = []
     for votacion in qs:
         abierta = (votacion.fecha_inicio is None or votacion.fecha_inicio <= ahora) and (votacion.fecha_fin is None or votacion.fecha_fin >= ahora)
-        items.append({"obj": votacion, "abierta": abierta, "ya_voto": request.user.is_authenticated and Voto.objects.filter(votacion=votacion, usuario=request.user).exists(), "tiene_opciones": votacion.opciones.filter(activa=True).exists()})
+        items.append({"obj": votacion, "abierta": abierta, "ya_voto": request.user.is_authenticated and Voto.objects.filter(categoria_id=votacion.categoria_id, edicion_id=votacion.categoria.edicion_id, usuario=request.user).exists(), "tiene_opciones": votacion.opciones.filter(activa=True).exists()})
     return render(request, "votaciones.html", {"votaciones_lista": items})
 
 
 def votar(request):
     votacion_id = request.GET.get("id") or request.POST.get("votacion_id")
-    votacion = get_object_or_404(Votacion.objects.select_related("categoria", "categoria__edicion"), pk=votacion_id, activa=True, categoria__activa=True, categoria__edicion__activa=True)
+    if not str(votacion_id).isdigit():
+        messages.error(request, "Votación no válida.")
+        return redirect("votaciones")
+    if not request.user.is_authenticated:
+        messages.info(request, "Inicia sesión para registrar tu voto.")
+        return redirect(f"/login.html?next=/votar.html?id={votacion_id}")
+    votacion = get_object_or_404(Votacion.objects.select_related("categoria", "categoria__edicion"), pk=votacion_id)
+    categoria = votacion.categoria
+    edicion = categoria.edicion
+    if not (votacion.activa and categoria.activa and edicion.activa):
+        messages.error(request, "Esta categoría no está habilitada para votar.")
+        return redirect("votaciones")
     ahora = timezone.now()
     if (votacion.fecha_inicio and votacion.fecha_inicio > ahora) or (votacion.fecha_fin and votacion.fecha_fin < ahora):
         messages.error(request, "Esta votación no está abierta en este momento.")
         return redirect("votaciones")
-    if not request.user.is_authenticated:
-        messages.info(request, "Inicia sesión para registrar tu voto.")
-        return redirect(f"/login.html?next=/votar.html?id={votacion.id}")
-    if Voto.objects.filter(votacion=votacion, usuario=request.user).exists():
-        messages.warning(request, "Ya registraste un voto en esta votación.")
+    if Voto.objects.filter(usuario=request.user, categoria=categoria, edicion=edicion).exists():
+        messages.warning(request, "Ya votaste en esta categoría. Solo se permite un voto por categoría en cada edición.")
         return redirect("votaciones")
     opciones = votacion.opciones.filter(activa=True)
     if request.method == "POST":
-        opcion = get_object_or_404(opciones, pk=request.POST.get("opcion"))
+        opcion_id = request.POST.get("opcion", "")
+        opcion = opciones.filter(pk=opcion_id).first() if opcion_id.isdigit() else None
+        if opcion is None:
+            messages.error(request, "La opción seleccionada no es válida para esta votación.")
+            return redirect(f"/votar.html?id={votacion.id}")
         try:
             with transaction.atomic():
                 Voto.objects.create(votacion=votacion, opcion=opcion, usuario=request.user)
         except IntegrityError:
-            messages.warning(request, "Ya registraste un voto en esta votación.")
+            messages.warning(request, "Ya votaste en esta categoría. Solo se permite un voto por categoría en cada edición.")
             return redirect("votaciones")
         request.session["ultimo_voto"] = {"votacion": votacion.titulo, "opcion": opcion.nombre}
         return redirect("confirmacion")
@@ -127,3 +141,39 @@ def cerrar_sesion(request):
 @staff_member_required(login_url="/login.html")
 def panel_administracion(request):
     return render(request, "admin.html")
+
+@login_required(login_url="/login.html")
+def mis_votos(request):
+    votos = Voto.objects.filter(usuario=request.user).select_related("edicion", "categoria", "votacion", "opcion")
+    return render(request, "mis_votos.html", {"votos": votos})
+
+@require_GET
+def api_categorias(request):
+    categorias = (
+        Categoria.objects.filter(activa=True, edicion__activa=True)
+        .select_related("edicion")
+        .prefetch_related("votaciones__opciones")
+    )
+    datos = []
+    for categoria in categorias:
+        opciones = []
+        for votacion in categoria.votaciones.all():
+            if not votacion.activa:
+                continue
+            for opcion in votacion.opciones.all():
+                if opcion.activa:
+                    opciones.append({
+                        "id": opcion.id,
+                        "nombre": opcion.nombre,
+                        "descripcion": opcion.descripcion,
+                        "votacion_id": votacion.id,
+                        "votacion": votacion.titulo,
+                    })
+        datos.append({
+            "id": categoria.id,
+            "nombre": categoria.nombre,
+            "descripcion": categoria.descripcion,
+            "edicion": {"id": categoria.edicion.id, "nombre": categoria.edicion.nombre, "anio": categoria.edicion.anio},
+            "opciones": opciones,
+        })
+    return JsonResponse({"categorias": datos}, json_dumps_params={"ensure_ascii": False, "indent": 2})

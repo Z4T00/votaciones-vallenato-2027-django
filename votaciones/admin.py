@@ -27,9 +27,9 @@ class OpcionAdmin(admin.ModelAdmin):
 
 @admin.register(Voto)
 class VotoAdmin(admin.ModelAdmin):
-    list_display = ("votacion", "opcion", "usuario", "creado_en")
-    list_filter = ("votacion", "creado_en")
+    list_display = ("usuario", "edicion", "categoria", "votacion", "opcion", "creado_en")
+    list_filter = ("edicion", "categoria", "votacion", "creado_en")
     search_fields = ("usuario__username", "opcion__nombre", "votacion__titulo")
-    readonly_fields = ("votacion", "opcion", "usuario", "creado_en")
+    readonly_fields = ("edicion", "categoria", "votacion", "opcion", "usuario", "creado_en")
     def has_add_permission(self, request):
         return False

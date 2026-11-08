@@ -59,8 +59,9 @@ class Opcion(models.Model):
     def __str__(self):
         return self.nombre
 
-
 class Voto(models.Model):
+    edicion = models.ForeignKey(Edicion, on_delete=models.CASCADE, related_name="votos")
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="votos")
     votacion = models.ForeignKey(Votacion, on_delete=models.CASCADE, related_name="votos")
     opcion = models.ForeignKey(Opcion, on_delete=models.CASCADE, related_name="votos")
     usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="votos_festival")
@@ -69,10 +70,16 @@ class Voto(models.Model):
     class Meta:
         ordering = ["-creado_en"]
         constraints = [
-            models.UniqueConstraint(fields=["votacion", "usuario"], name="un_voto_por_usuario_votacion")
+            models.UniqueConstraint(fields=["votacion", "usuario"], name="un_voto_por_usuario_votacion"),
+            models.UniqueConstraint(fields=["usuario", "categoria", "edicion"], name="un_voto_por_usuario_categoria_edicion"),
         ]
         verbose_name = "voto"
         verbose_name_plural = "votos"
+
+    def save(self, *args, **kwargs):
+        self.categoria_id = self.votacion.categoria_id
+        self.edicion_id = self.votacion.categoria.edicion_id
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.usuario} — {self.votacion}: {self.opcion}"

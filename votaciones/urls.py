@@ -12,4 +12,6 @@ urlpatterns = [
     path("login.html", views.iniciar_sesion, name="login"),
     path("registro.html", views.registro, name="registro"),
     path("salir/", views.cerrar_sesion, name="logout"),
+    path("mis-votos.html", views.mis_votos, name="mis_votos"),
+    path("api/categorias/", views.api_categorias, name="api_categorias"),
 ]
